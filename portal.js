@@ -42,19 +42,33 @@ document.querySelectorAll('.password-toggle').forEach((toggle) => {
   });
 });
 
-/* ── Forms ── */
+/* ── Sign in ── */
 
-// Both forms are visual only, so a valid submit explains where to go instead
-function explainDemoForm(note) {
-  return (event) => {
-    event.preventDefault();
-    note.textContent =
-      'This form is part of the demo and does not sign anyone in yet. Use the demo pipeline buttons below to open a dashboard.';
-  };
-}
+// Checks the demo credentials in data.js. There is no real authentication.
+signinForm.addEventListener('submit', (event) => {
+  event.preventDefault();
 
-signinForm.addEventListener('submit', explainDemoForm(signinNote));
-signupForm.addEventListener('submit', explainDemoForm(signupNote));
+  const username = document.getElementById('signin-username').value;
+  const password = document.getElementById('signin-password').value;
+  const account = findAccount(username, password);
+
+  if (!account) {
+    signinNote.textContent = 'We do not recognise that username and password. Check them and try again.';
+    return;
+  }
+
+  setSession(account.role, account.name, account.id);
+  window.location.href = dashboardForRole[account.role];
+});
+
+/* ── Create account ── */
+
+// Creating an account is still visual only, because nothing here has a backend
+signupForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  signupNote.textContent =
+    'Sign up is part of the demo and does not create a real account. Sign in with one of the demo usernames instead.';
+});
 
 /* ── Demo pipeline ── */
 
