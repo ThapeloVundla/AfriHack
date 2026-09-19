@@ -1,0 +1,269 @@
+/* ── Broker dashboard ── */
+/* Built for a 1280px desk first, then narrowed with max-width queries */
+
+.broker-body {
+  background-color: var(--offwhite);
+}
+
+/* Top bar */
+.broker-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  height: 4rem;
+  padding-inline: var(--space-lg);
+  background-color: #fff;
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.logo-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--black);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Demo clock */
+.demo-clock {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.demo-clock-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.demo-clock-value {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--black);
+}
+
+.btn-small {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+}
+
+.btn-text {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--grey-600);
+  border-radius: var(--border-radius);
+}
+
+.btn-text:hover {
+  color: var(--crimson);
+}
+
+.broker-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-left: var(--space-md);
+  border-left: 1px solid var(--grey-200);
+}
+
+.broker-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--black);
+}
+
+/* Layout */
+.broker-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  align-items: start;
+}
+
+/* Sidebar */
+.side-nav {
+  position: sticky;
+  top: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  height: calc(100vh - 4rem);
+  padding: var(--space-lg) var(--space-md);
+  background-color: #fff;
+  border-right: 1px solid var(--grey-200);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--charcoal);
+  text-align: left;
+  border-radius: var(--border-radius);
+}
+
+.nav-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  background-color: var(--grey-100);
+}
+
+.nav-btn[aria-selected="true"] {
+  background-color: rgba(192, 45, 46, 0.08);
+  color: var(--crimson);
+}
+
+.nav-badge {
+  margin-left: auto;
+  min-width: 22px;
+  padding: 0 var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  color: #fff;
+  background-color: var(--crimson);
+  border-radius: 100px;
+}
+
+/* Screens */
+.main-content {
+  padding: var(--space-2xl);
+  min-width: 0;
+}
+
+.screen {
+  display: none;
+  max-width: 1000px;
+}
+
+.screen.active {
+  display: block;
+}
+
+.screen-title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-xs);
+}
+
+.screen-subtitle {
+  color: var(--grey-600);
+  margin-bottom: var(--space-xl);
+}
+
+/* Marks a screen another teammate is still building */
+.placeholder {
+  padding: var(--space-xl);
+  background-color: #fff;
+  border: 1px dashed var(--grey-200);
+  border-radius: var(--border-radius);
+}
+
+.placeholder p {
+  color: var(--grey-600);
+  max-width: 60ch;
+}
+
+/* ── Laptop: under 1024px ── */
+@media (max-width: 1023px) {
+  .broker-layout {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .main-content {
+    padding: var(--space-xl);
+  }
+}
+
+/* ── Phone and small tablet: under 768px ── */
+@media (max-width: 767px) {
+  .broker-header {
+    height: auto;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .broker-identity {
+    margin-left: auto;
+    padding-left: var(--space-sm);
+  }
+
+  .broker-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* The sidebar becomes a scrolling row of tabs above the content */
+  .side-nav {
+    position: static;
+    flex-direction: row;
+    height: auto;
+    gap: var(--space-xs);
+    padding: var(--space-sm);
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--grey-200);
+  }
+
+  .nav-btn {
+    flex-direction: column;
+    gap: var(--space-xs);
+    width: auto;
+    min-width: 72px;
+    padding: var(--space-xs);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .nav-badge {
+    margin-left: 0;
+  }
+
+  .main-content {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .screen-title {
+    font-size: var(--font-size-xl);
+  }
+}

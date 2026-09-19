@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broker dashboard - Fin Flow</title>
+  <meta name="description" content="The Fin Flow broker dashboard. Manage clients, claims, reminders and providers in one place.">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="dashboard-broker.css">
+</head>
+<body class="broker-body">
+
+  <!-- Top bar -->
+  <header class="broker-header">
+    <a href="index.html" class="logo" aria-label="Fin Flow home">
+      <img src="assets/logo.jpg" alt="Fin Flow logo">
+      <span class="logo-name">Fin Flow</span>
+    </a>
+
+    <div class="header-actions">
+      <!-- The demo clock, so reminders can be made to fire in front of judges -->
+      <div class="demo-clock">
+        <span class="demo-clock-label">Demo date</span>
+        <span class="demo-clock-value" id="demoDateValue">Loading</span>
+      </div>
+      <button type="button" class="btn btn-outline btn-small" id="btnSkipAhead">Skip ahead a month</button>
+      <button type="button" class="btn-text" id="btnResetClock">Reset</button>
+
+      <div class="broker-identity">
+        <span class="broker-name" id="brokerName">Adviser</span>
+        <button type="button" class="btn-text" id="btnSignOut">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="broker-layout">
+
+    <!-- Sidebar -->
+    <nav class="side-nav" aria-label="Dashboard navigation">
+      <button class="nav-btn" data-tab="clients" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <span>Clients</span>
+      </button>
+      <button class="nav-btn" data-tab="claims" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+        <span>Claims</span>
+      </button>
+      <button class="nav-btn" data-tab="reminders" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>Reminders</span>
+      </button>
+      <button class="nav-btn" data-tab="notifications" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span>Alerts</span>
+        <span class="nav-badge" id="alertCount" hidden>0</span>
+      </button>
+      <button class="nav-btn" data-tab="providers" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 21h18"/>
+          <path d="M5 21V7l7-4 7 4v14"/>
+          <path d="M10 21v-6h4v6"/>
+        </svg>
+        <span>Providers</span>
+      </button>
+    </nav>
+
+    <!-- Screens -->
+    <main class="main-content">
+
+      <section class="screen active" id="screen-clients">
+        <h1 class="screen-title">Clients</h1>
+        <p class="screen-subtitle">Every client you advise, with their outstanding documents and open claims.</p>
+        <div class="placeholder">
+          <p>The client list goes here, one row per client with their document and claim counts. Selecting a row opens the client detail with their net worth summary and goals.</p>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-claims">
+        <h1 class="screen-title">Claims</h1>
+        <p class="screen-subtitle">Advance each claim through its ten steps on the insurer's behalf.</p>
+        <div class="placeholder">
+          <p>The claims list goes here, followed by the claim tracker with the button that moves a claim on one step.</p>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-reminders">
+        <h1 class="screen-title">Reminders</h1>
+        <p class="screen-subtitle">Rules that decide who gets nudged, and when.</p>
+        <div class="placeholder">
+          <p>The reminder rules table goes here, with a trigger date, recurrence and recipient on each row. Skip ahead above moves the demo date so a rule fires.</p>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-notifications">
+        <h1 class="screen-title">Notifications</h1>
+        <p class="screen-subtitle">Reminders that have fired for you, on or before the demo date.</p>
+        <div class="placeholder">
+          <p>The broker notification feed goes here, showing every reminder addressed to the broker or to both parties.</p>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-providers">
+        <h1 class="screen-title">Provider directory</h1>
+        <p class="screen-subtitle">Contact details for every provider the firm places business with.</p>
+        <div class="placeholder">
+          <p>The provider directory goes here, listing each provider with its category, claims line and website.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="dashboard-broker.js"></script>
+</body>
+</html>
