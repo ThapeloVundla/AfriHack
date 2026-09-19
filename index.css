@@ -7,8 +7,23 @@
   left: 0;
   right: 0;
   z-index: 100;
+  background-color: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.site-header.scrolled {
   background-color: var(--offwhite);
-  border-bottom: 1px solid var(--grey-200);
+  border-bottom-color: var(--grey-200);
+}
+
+.site-header.scrolled .logo-name,
+.site-header.scrolled .nav-link {
+  color: var(--black);
+}
+
+.site-header.scrolled .nav-link:hover {
+  color: var(--crimson);
 }
 
 .header-inner {
@@ -33,7 +48,7 @@
 .logo-name {
   font-size: var(--font-size-lg);
   font-weight: 700;
-  color: var(--black);
+  color: #fff;
 }
 
 .main-nav {
@@ -46,33 +61,59 @@
   display: none;
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--grey-600);
+  color: rgba(255, 255, 255, 0.8);
   padding: var(--space-xs) var(--space-sm);
   min-height: 44px;
   align-items: center;
 }
 
 .nav-link:hover {
-  color: var(--black);
+  color: #fff;
 }
 
 /* Hero */
 .hero {
-  padding-top: calc(3.5rem + var(--space-2xl));
-  padding-bottom: var(--space-2xl);
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  background-image: url('https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=1920&q=80');
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(35, 31, 32, 0.88) 0%,
+    rgba(35, 31, 32, 0.72) 50%,
+    rgba(192, 45, 46, 0.35) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding-block: calc(3.5rem + var(--space-xl)) var(--space-xl);
 }
 
 .hero-badge {
   display: inline-block;
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--crimson);
-  background-color: rgba(192, 45, 46, 0.08);
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.12);
   padding: var(--space-xs) var(--space-md);
   border-radius: 100px;
   margin-bottom: var(--space-lg);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -81,6 +122,7 @@
   font-weight: 800;
   margin-bottom: var(--space-md);
   letter-spacing: -0.02em;
+  color: #fff;
 }
 
 .hero h1 span {
@@ -89,7 +131,7 @@
 
 .hero-sub {
   font-size: var(--font-size-lg);
-  color: var(--grey-600);
+  color: rgba(255, 255, 255, 0.75);
   max-width: 500px;
   margin: 0 auto var(--space-xl);
 }
@@ -108,44 +150,44 @@
 
 .hero-cta .btn-secondary {
   font-size: var(--font-size-sm);
-  color: var(--grey-600);
+  color: rgba(255, 255, 255, 0.7);
   min-height: 44px;
   display: inline-flex;
   align-items: center;
 }
 
 .hero-cta .btn-secondary:hover {
-  color: var(--crimson);
+  color: #fff;
 }
 
-/* Trust strip */
-.trust-strip {
-  padding: var(--space-lg) 0;
-  text-align: center;
-  border-top: 1px solid var(--grey-200);
-  border-bottom: 1px solid var(--grey-200);
+/* Hero trust strip */
+.hero-trust {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.trust-strip p {
+.hero-trust-label {
   font-size: var(--font-size-sm);
-  color: var(--grey-400);
+  color: rgba(255, 255, 255, 0.45);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 600;
+  margin-bottom: var(--space-md);
 }
 
 .trust-logos {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-md) var(--space-xl);
-  margin-top: var(--space-md);
+  gap: var(--space-sm) var(--space-lg);
 }
 
 .trust-logos span {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--grey-400);
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
 }
 
 /* Features */
@@ -329,9 +371,8 @@
     height: 4rem;
   }
 
-  .hero {
+  .hero-content {
     padding-top: calc(4rem + var(--space-3xl));
-    padding-bottom: var(--space-3xl);
   }
 
   .hero h1 {
@@ -340,6 +381,10 @@
 
   .hero-sub {
     font-size: var(--font-size-xl);
+  }
+
+  .hero-trust {
+    margin-top: var(--space-3xl);
   }
 
   .features-heading h2,
