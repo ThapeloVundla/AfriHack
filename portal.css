@@ -1,0 +1,306 @@
+/* ── Portal: sign in and create account ── */
+
+/* Keeps the footer at the bottom on short pages */
+.portal-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header */
+.portal-header {
+  background-color: #fff;
+  border-bottom: 1px solid var(--grey-200);
+}
+
+.portal-header .header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 3.5rem;
+}
+
+.portal-header .logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.portal-header .logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.portal-header .logo-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--black);
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--grey-600);
+}
+
+.back-link:hover {
+  color: var(--crimson);
+}
+
+/* Layout */
+.portal-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-md);
+}
+
+.portal-shell {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Card */
+.portal-card {
+  background: #fff;
+  border: 1px solid var(--grey-200);
+  border-radius: 1rem;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.card-heading {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+}
+
+.card-copy {
+  font-size: var(--font-size-base);
+  color: var(--grey-600);
+  margin-bottom: var(--space-xl);
+}
+
+/* Form */
+.portal-form {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.field {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.field label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.field input {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  color: var(--charcoal);
+  background-color: var(--offwhite);
+  border: 1px solid var(--grey-200);
+  border-radius: var(--border-radius);
+  padding: 0 var(--space-md);
+  min-height: 56px;
+  width: 100%;
+}
+
+.field input::placeholder {
+  color: var(--grey-400);
+}
+
+.field input:hover {
+  border-color: var(--grey-400);
+}
+
+.field input:focus {
+  outline: none;
+  background-color: #fff;
+  border-color: var(--crimson);
+  box-shadow: 0 0 0 3px rgba(192, 45, 46, 0.12);
+}
+
+/* Password field with a show and hide control */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 52px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--space-xs);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius);
+  color: var(--grey-600);
+}
+
+.password-toggle:hover {
+  color: var(--crimson);
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* The hidden attribute is not honoured on inline SVG without this */
+.password-toggle svg[hidden] {
+  display: none;
+}
+
+/* Primary action, sized to match the reference */
+.btn-block {
+  width: 100%;
+}
+
+.btn-wide {
+  min-height: 56px;
+  margin-top: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+/* Shown after a submit, because the forms do not sign anyone in yet */
+.form-note {
+  font-size: var(--font-size-sm);
+  color: var(--grey-600);
+  margin-top: var(--space-md);
+}
+
+.form-note:empty {
+  margin-top: 0;
+}
+
+/* Create account sits in the corner, as the second action on the card */
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-md);
+}
+
+.corner-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--crimson);
+  border-radius: var(--border-radius);
+}
+
+.corner-link:hover {
+  color: var(--crimson-hover);
+  text-decoration: underline;
+}
+
+/* Demo pipeline */
+.demo {
+  margin-top: var(--space-xl);
+}
+
+.demo-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.demo-divider::before,
+.demo-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--grey-200);
+}
+
+.demo-divider span {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--grey-400);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.demo-heading {
+  font-size: var(--font-size-base);
+  text-align: center;
+  margin-bottom: var(--space-xs);
+}
+
+.demo-copy {
+  font-size: var(--font-size-sm);
+  color: var(--grey-600);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.demo-buttons {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.demo-buttons .btn-outline {
+  background-color: #fff;
+}
+
+/* Footer */
+.portal-footer {
+  background-color: var(--black);
+  padding: var(--space-lg) 0;
+  text-align: center;
+}
+
+.portal-footer p {
+  font-size: var(--font-size-sm);
+  color: var(--grey-400);
+}
+
+/* ── Tablet: 768px+ ── */
+@media (min-width: 768px) {
+  .portal-main {
+    align-items: center;
+    padding-block: var(--space-2xl);
+  }
+
+  .portal-card {
+    padding: var(--space-2xl);
+  }
+
+  .card-heading {
+    font-size: var(--font-size-2xl);
+  }
+
+  .demo-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Desktop: 1280px+ ── */
+@media (min-width: 1280px) {
+  .portal-header .header-inner {
+    height: 4rem;
+  }
+}

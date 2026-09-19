@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in to Fin Flow</title>
+  <meta name="description" content="Sign in to Fin Flow to see your net worth, goals and claims, or create an account.">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="portal.css">
+</head>
+<body class="portal-body">
+
+  <!-- Header -->
+  <header class="portal-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Fin Flow home">
+        <img src="assets/logo.jpg" alt="Fin Flow logo">
+        <span class="logo-name">Fin Flow</span>
+      </a>
+      <a href="index.html" class="back-link">Back to home</a>
+    </div>
+  </header>
+
+  <main class="portal-main">
+    <div class="portal-shell">
+
+      <div class="portal-card">
+
+        <!-- Sign in -->
+        <div id="signin-panel">
+          <h1 class="card-heading">Sign in</h1>
+          <p class="card-copy">Enter your email address and password to continue.</p>
+
+          <form id="signin-form" class="portal-form">
+            <div class="field">
+              <label for="signin-email">Email address</label>
+              <input type="email" id="signin-email" name="email" autocomplete="email" placeholder="e.g. thandi@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="signin-password">Password</label>
+              <div class="password-wrap">
+                <input type="password" id="signin-password" name="password" autocomplete="current-password" placeholder="Enter your password" required>
+                <button type="button" class="password-toggle" data-toggle-for="signin-password" aria-label="Show password" aria-pressed="false">
+                  <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-wide">Log in</button>
+          </form>
+
+          <p class="form-note" id="signin-note" role="status" aria-live="polite"></p>
+
+          <div class="card-footer">
+            <button type="button" id="show-signup" class="corner-link">Create an account <span aria-hidden="true">&rarr;</span></button>
+          </div>
+        </div>
+
+        <!-- Create account -->
+        <div id="signup-panel" hidden>
+          <h1 class="card-heading">Create an account</h1>
+          <p class="card-copy">Your adviser links your policies once you have signed up.</p>
+
+          <form id="signup-form" class="portal-form">
+            <div class="field">
+              <label for="signup-name">Full name</label>
+              <input type="text" id="signup-name" name="name" autocomplete="name" placeholder="e.g. Thandi Mokoena" required>
+            </div>
+
+            <div class="field">
+              <label for="signup-email">Email address</label>
+              <input type="email" id="signup-email" name="email" autocomplete="email" placeholder="e.g. thandi@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="signup-password">Password</label>
+              <div class="password-wrap">
+                <input type="password" id="signup-password" name="password" autocomplete="new-password" placeholder="Choose a password" required>
+                <button type="button" class="password-toggle" data-toggle-for="signup-password" aria-label="Show password" aria-pressed="false">
+                  <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" hidden>
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block btn-wide">Create account</button>
+          </form>
+
+          <p class="form-note" id="signup-note" role="status" aria-live="polite"></p>
+
+          <div class="card-footer">
+            <button type="button" id="show-signin" class="corner-link"><span aria-hidden="true">&larr;</span> Back to sign in</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Demo pipeline -->
+      <section class="demo" aria-labelledby="demo-heading">
+        <div class="demo-divider">
+          <span>MVP demo direct pipeline</span>
+        </div>
+        <h2 id="demo-heading" class="demo-heading">No auth needed</h2>
+        <p class="demo-copy">Pick a role to open its dashboard with sample data. The form above is visual only for now.</p>
+        <div class="demo-buttons">
+          <button type="button" class="btn btn-outline btn-block" data-demo-role="client">Log in as demo client</button>
+          <button type="button" class="btn btn-outline btn-block" data-demo-role="broker">Log in as demo broker</button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="portal-footer">
+    <div class="container">
+      <p>Fin Flow is a demo concept built for Royal Square Financial.</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="portal.js"></script>
+</body>
+</html>
