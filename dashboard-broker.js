@@ -1,20 +1,27 @@
 /* ── Broker dashboard ── */
+/* Shared with the insurer, who sees only the claims registered with them */
 
 (function () {
   'use strict';
 
   /* ── Session ── */
-  var session = requireRole('broker');
+  var session = requireAnyRole(['broker', 'insurer']);
   if (!session) return;
 
-  var broker = getBrokerById(session.id) || brokers[0];
-  if (!broker) {
+  var isInsurer = session.role === 'insurer';
+
+  var account = isInsurer
+    ? getInsurerById(session.id)
+    : getBrokerById(session.id);
+
+  if (!account) {
     clearSession();
     window.location.href = 'portal.html';
     return;
   }
 
-  document.getElementById('brokerName').textContent = broker.name;
+  document.getElementById('brokerName').textContent = account.name;
+  document.getElementById('headerRole').textContent = roleLabels[session.role];
 
   // Puts the sample claims into localStorage before any screen reads them
   getAllClaims();
@@ -25,10 +32,21 @@
     return d.toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
-  /* ── Navigation ── */
+  /* ── What each role may see ── */
+  var tabsByRole = {
+    broker: ['clients', 'claims', 'reminders', 'notifications', 'providers'],
+    insurer: ['claims']
+  };
+  var allowedTabs = tabsByRole[session.role];
+
   var navButtons = document.querySelectorAll('.nav-btn');
   var screens = document.querySelectorAll('.screen');
 
+  navButtons.forEach(function (btn) {
+    btn.hidden = allowedTabs.indexOf(btn.dataset.tab) === -1;
+  });
+
+  /* ── Navigation ── */
   function showTab(tabName) {
     navButtons.forEach(function (btn) {
       btn.setAttribute('aria-selected', btn.dataset.tab === tabName ? 'true' : 'false');
@@ -48,6 +66,8 @@
   /* ── Demo clock ── */
   var demoDateValue = document.getElementById('demoDateValue');
   var alertCount = document.getElementById('alertCount');
+  var skipAhead = document.getElementById('btnSkipAhead');
+  var resetClock = document.getElementById('btnResetClock');
 
   // Reminders this broker should see, once the demo date has reached them
   function dueReminders() {
@@ -59,6 +79,9 @@
   }
 
   function renderClock() {
+    // Reminders belong to the brokerage, so an insurer has no clock to move
+    if (isInsurer) return;
+
     demoDateValue.textContent = formatDate(getDemoDate());
 
     var count = dueReminders().length;
@@ -66,15 +89,31 @@
     alertCount.hidden = count === 0;
   }
 
-  document.getElementById('btnSkipAhead').addEventListener('click', function () {
+  skipAhead.addEventListener('click', function () {
     advanceDemoDate(30);
     renderClock();
   });
 
-  document.getElementById('btnResetClock').addEventListener('click', function () {
+  resetClock.addEventListener('click', function () {
     resetDemoDate();
     renderClock();
   });
+
+  /* ── Insurer view ── */
+  function applyInsurerView() {
+    document.title = account.name + ' claims - Fin Flow';
+    document.querySelector('.demo-clock').hidden = true;
+    skipAhead.hidden = true;
+    resetClock.hidden = true;
+
+    var handled = getClientsForInsurer(account.id).length;
+    document.querySelector('#screen-claims .screen-subtitle').textContent =
+      handled === 1
+        ? 'Claims registered with ' + account.name + ', for the one client you handle.'
+        : 'Claims registered with ' + account.name + ', across the ' + handled + ' clients you handle.';
+  }
+
+  if (isInsurer) applyInsurerView();
 
   /* ── Sign out ── */
   document.getElementById('btnSignOut').addEventListener('click', function () {
@@ -87,6 +126,7 @@
     renderClock();
   });
 
+  showTab(allowedTabs[0]);
   renderClock();
 
 })();

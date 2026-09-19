@@ -84,6 +84,18 @@
   color: var(--crimson);
 }
 
+.header-role {
+  padding: 2px var(--space-sm);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--crimson);
+  background-color: rgba(192, 45, 46, 0.08);
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
 .broker-identity {
   display: flex;
   align-items: center;
