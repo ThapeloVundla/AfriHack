@@ -35,6 +35,47 @@ function requireRole(expectedRole) {
   return session;
 }
 
+/* ── Demo clock ── */
+
+// The demo runs on its own date so the skip ahead button can fire reminders
+// in front of an audience
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// Keeps the sample dates either side of today, whenever the demo runs
+function daysFromNow(days) {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function getDemoDate() {
+  return localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'demoDate') || todayIso();
+}
+
+function setDemoDate(isoDate) {
+  localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'demoDate', isoDate);
+  return isoDate;
+}
+
+function advanceDemoDate(days) {
+  const d = new Date(getDemoDate());
+  d.setDate(d.getDate() + days);
+  return setDemoDate(d.toISOString().slice(0, 10));
+}
+
+function resetDemoDate() {
+  localStorage.removeItem(FINFLOW_STORAGE_PREFIX + 'demoDate');
+  return todayIso();
+}
+
+// ISO dates compare correctly as strings, so a reminder has fired once its
+// trigger date is on or before the demo date
+function isDue(triggerDate, onDate) {
+  return triggerDate <= (onDate || getDemoDate());
+}
+
 /* ── Insurers ── */
 
 const insurers = [
@@ -142,7 +183,7 @@ const goals = [
     target: 100000,
     current: 45000,
     type: 'individual',
-    deadline: '2025-12-31'
+    deadline: '2027-03-31'
   },
   {
     id: 'g2',
@@ -151,7 +192,7 @@ const goals = [
     target: 210000,
     current: 85000,
     type: 'individual',
-    deadline: '2026-06-30'
+    deadline: '2027-06-30'
   },
   {
     id: 'g3',
@@ -180,7 +221,7 @@ const goals = [
     target: 155000,
     current: 60000,
     type: 'individual',
-    deadline: '2026-06-30'
+    deadline: '2027-06-30'
   }
 ];
 
@@ -194,7 +235,7 @@ const reminders = [
     title: 'Payslip outstanding',
     description: 'Thandi has not submitted her latest payslip.',
     recipient: 'broker',
-    triggerDate: '2024-11-01',
+    triggerDate: daysFromNow(-6),
     recurring: false,
     status: 'active'
   },
@@ -205,7 +246,7 @@ const reminders = [
     title: 'Annual policy review due',
     description: 'James and Priya\'s annual review is scheduled for next month.',
     recipient: 'both',
-    triggerDate: '2024-12-01',
+    triggerDate: daysFromNow(21),
     recurring: 'yearly',
     status: 'active'
   },
@@ -216,7 +257,7 @@ const reminders = [
     title: 'Proof of address outstanding',
     description: 'Sipho needs to provide proof of address.',
     recipient: 'client',
-    triggerDate: '2024-11-15',
+    triggerDate: daysFromNow(-2),
     recurring: false,
     status: 'active'
   },
@@ -227,7 +268,7 @@ const reminders = [
     title: 'Vehicle insurance renewal',
     description: 'Thandi\'s vehicle insurance renews on 1 December.',
     recipient: 'both',
-    triggerDate: '2024-12-01',
+    triggerDate: daysFromNow(45),
     recurring: 'yearly',
     status: 'active'
   }
@@ -241,11 +282,11 @@ const claims = [
     clientId: 'c3',
     insurerId: 'santam',
     vehicle: 'VW Polo 2022',
-    incidentDate: '2024-10-28',
+    incidentDate: daysFromNow(-12),
     description: 'Rear-ended at a traffic light on William Nicol Drive. Rear bumper and boot lid damaged.',
     currentStep: 4,
     photos: [],
-    createdAt: '2024-10-28T14:30:00Z'
+    createdAt: daysFromNow(-12) + 'T14:30:00Z'
   }
 ];
 
@@ -367,7 +408,7 @@ function getSavedClaims() {
 }
 
 function saveClaim(claim) {
-  var saved = getSavedClaims();
+  var saved = getAllClaims();
   claim.id = 'cl' + Date.now();
   claim.createdAt = new Date().toISOString();
   claim.currentStep = 1;
@@ -393,6 +434,52 @@ function saveRequest(request) {
   saved.push(request);
   localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'requests', JSON.stringify(saved));
   return request;
+}
+
+// Seeds the sample claims into localStorage on first run, so the broker can
+// advance a claim and both dashboards read the same record
+function getAllClaims() {
+  var raw = localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'claims');
+  if (raw) {
+    try {
+      return JSON.parse(raw);
+    } catch {
+      // Fall through and seed again
+    }
+  }
+  // Parsed back rather than handed over, so the seeded rows in this file stay
+  // read only
+  var seeded = JSON.stringify(claims);
+  localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'claims', seeded);
+  return JSON.parse(seeded);
+}
+
+function getClaimsForClient(clientId) {
+  return getAllClaims().filter(function (c) { return c.clientId === clientId; });
+}
+
+function getClaimById(claimId) {
+  return getAllClaims().find(function (c) { return c.id === claimId; }) || null;
+}
+
+function updateClaim(updated) {
+  var all = getAllClaims().map(function (c) {
+    return c.id === updated.id ? updated : c;
+  });
+  localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'claims', JSON.stringify(all));
+  return updated;
+}
+
+// The broker moves a claim on one step at a time, on the insurer's behalf
+function advanceClaim(claimId) {
+  var claim = getClaimById(claimId);
+  if (!claim || claim.currentStep >= claimSteps.length) return claim;
+  claim.currentStep += 1;
+  return updateClaim(claim);
+}
+
+function getBrokerById(brokerId) {
+  return brokers.find(function (b) { return b.id === brokerId; }) || null;
 }
 
 function getClientById(clientId) {
