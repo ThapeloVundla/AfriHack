@@ -2,6 +2,20 @@
 
 const FINFLOW_STORAGE_PREFIX = 'finflow:';
 
+// Bumped whenever the seeded data changes, so a browser holding the previous
+// demo data discards it instead of showing rows that no longer exist
+const FINFLOW_DATA_VERSION = '2';
+
+function ensureDataVersion() {
+  var key = FINFLOW_STORAGE_PREFIX + 'dataVersion';
+  if (localStorage.getItem(key) === FINFLOW_DATA_VERSION) return;
+
+  localStorage.removeItem(FINFLOW_STORAGE_PREFIX + 'claims');
+  localStorage.removeItem(FINFLOW_STORAGE_PREFIX + 'requests');
+  localStorage.removeItem(FINFLOW_STORAGE_PREFIX + 'demoDate');
+  localStorage.setItem(key, FINFLOW_DATA_VERSION);
+}
+
 /* ── Helpers ── */
 
 function getSession() {
@@ -24,6 +38,17 @@ function setSession(role, name, id) {
 
 function clearSession() {
   localStorage.removeItem(FINFLOW_STORAGE_PREFIX + 'session');
+}
+
+// For a page more than one role may open, such as the broker dashboard the
+// insurer shares
+function requireAnyRole(allowedRoles) {
+  const session = getSession();
+  if (!session || allowedRoles.indexOf(session.role) === -1) {
+    window.location.href = 'portal.html';
+    return null;
+  }
+  return session;
 }
 
 function requireRole(expectedRole) {
@@ -79,13 +104,13 @@ function isDue(triggerDate, onDate) {
 /* ── Insurers ── */
 
 const insurers = [
-  { id: 'sanlam', name: 'Sanlam', claimsPhone: '0860 726 526' },
-  { id: 'old-mutual', name: 'Old Mutual', claimsPhone: '0860 247 365' },
-  { id: 'liberty', name: 'Liberty', claimsPhone: '0860 456 789' },
-  { id: 'momentum', name: 'Momentum', claimsPhone: '0860 111 636' },
-  { id: 'discovery', name: 'Discovery', claimsPhone: '0860 999 725' },
-  { id: 'allan-gray', name: 'Allan Gray', claimsPhone: '0860 000 654' },
-  { id: 'santam', name: 'Santam', claimsPhone: '0860 444 444' }
+  { id: 'sanlam', name: 'Sanlam', claimsPhone: '0860 726 526', contact: 'Naledi Mofokeng', username: 'sanlam', password: 'demo123' },
+  { id: 'old-mutual', name: 'Old Mutual', claimsPhone: '0860 247 365', contact: 'Werner Botha', username: 'oldmutual', password: 'demo123' },
+  { id: 'liberty', name: 'Liberty', claimsPhone: '0860 456 789', contact: 'Ayesha Patel', username: 'liberty', password: 'demo123' },
+  { id: 'momentum', name: 'Momentum', claimsPhone: '0860 111 636', contact: 'Tebogo Maseko', username: 'momentum', password: 'demo123' },
+  { id: 'discovery', name: 'Discovery', claimsPhone: '0860 999 725', contact: 'Rushdi Adams', username: 'discovery', password: 'demo123' },
+  { id: 'allan-gray', name: 'Allan Gray', claimsPhone: '0860 000 654', contact: 'Kirsten de Wet', username: 'allangray', password: 'demo123' },
+  { id: 'santam', name: 'Santam', claimsPhone: '0860 444 444', contact: 'Musa Ndlovu', username: 'santam', password: 'demo123' }
 ];
 
 /* ── Claim steps ── */
@@ -110,185 +135,63 @@ const clients = [
     id: 'c1',
     name: 'Thandi Mokoena',
     email: 'thandi@example.com',
+    username: 'thandi',
+    password: 'demo123',
     phone: '082 555 1234',
     broker: 'b1',
-    assets: [
-      { name: 'Primary residence', value: 1850000 },
-      { name: 'Vehicle - Toyota Hilux', value: 380000 },
-      { name: 'Sanlam retirement annuity', value: 520000 },
-      { name: 'Allan Gray investment', value: 275000 },
-      { name: 'Savings account', value: 45000 }
-    ],
-    liabilities: [
-      { name: 'Home loan', value: 1200000 },
-      { name: 'Vehicle finance', value: 210000 }
-    ],
-    documents: [
-      { id: 'd1', name: 'ID copy', status: 'received' },
-      { id: 'd2', name: 'Proof of address', status: 'received' },
-      { id: 'd3', name: 'Payslip - latest', status: 'outstanding' }
-    ]
+    assets: [],
+    liabilities: [],
+    documents: []
   },
   {
     id: 'c2',
     name: 'James and Priya Naidoo',
     email: 'james@example.com',
+    username: 'james',
+    password: 'demo123',
     phone: '083 555 5678',
     broker: 'b1',
-    assets: [
-      { name: 'Primary residence', value: 2400000 },
-      { name: 'Vehicle - BMW X3', value: 520000 },
-      { name: 'Liberty living annuity', value: 980000 },
-      { name: 'Old Mutual unit trusts', value: 410000 },
-      { name: 'Joint savings', value: 120000 }
-    ],
-    liabilities: [
-      { name: 'Home loan', value: 950000 },
-      { name: 'Vehicle finance', value: 310000 }
-    ],
-    documents: [
-      { id: 'd4', name: 'ID copies - both', status: 'received' },
-      { id: 'd5', name: 'Marriage certificate', status: 'received' }
-    ]
+    assets: [],
+    liabilities: [],
+    documents: []
   },
   {
     id: 'c3',
     name: 'Sipho Dlamini',
     email: 'sipho@example.com',
+    username: 'sipho',
+    password: 'demo123',
     phone: '084 555 9012',
     broker: 'b1',
-    assets: [
-      { name: 'Vehicle - VW Polo', value: 195000 },
-      { name: 'Discovery retirement fund', value: 340000 },
-      { name: 'Savings account', value: 28000 }
-    ],
-    liabilities: [
-      { name: 'Vehicle finance', value: 140000 },
-      { name: 'Credit card', value: 15000 }
-    ],
-    documents: [
-      { id: 'd6', name: 'ID copy', status: 'received' },
-      { id: 'd7', name: 'Proof of address', status: 'outstanding' }
-    ]
+    assets: [],
+    liabilities: [],
+    documents: []
+  },
+  {
+    id: 'c4',
+    name: 'Banele Phali',
+    email: 'banele@example.com',
+    username: 'Banele',
+    password: 'demo123',
+    phone: '082 555 3344',
+    broker: 'b1',
+    assets: [],
+    liabilities: [],
+    documents: []
   }
 ];
 
 /* ── Sample goals ── */
 
-const goals = [
-  {
-    id: 'g1',
-    clientId: 'c1',
-    name: 'Emergency fund',
-    target: 100000,
-    current: 45000,
-    type: 'individual',
-    deadline: '2027-03-31'
-  },
-  {
-    id: 'g2',
-    clientId: 'c1',
-    name: 'Pay off vehicle',
-    target: 210000,
-    current: 85000,
-    type: 'individual',
-    deadline: '2027-06-30'
-  },
-  {
-    id: 'g3',
-    clientId: 'c2',
-    name: 'Children education fund',
-    target: 500000,
-    current: 180000,
-    type: 'shared',
-    deadline: '2028-01-31',
-    sharedWith: 'spouse'
-  },
-  {
-    id: 'g4',
-    clientId: 'c2',
-    name: 'Retire at 60',
-    target: 3000000,
-    current: 1390000,
-    type: 'shared',
-    deadline: '2032-03-01',
-    sharedWith: 'spouse'
-  },
-  {
-    id: 'g5',
-    clientId: 'c3',
-    name: 'Debt-free by 2026',
-    target: 155000,
-    current: 60000,
-    type: 'individual',
-    deadline: '2027-06-30'
-  }
-];
+const goals = [];
 
 /* ── Sample reminders ── */
 
-const reminders = [
-  {
-    id: 'r1',
-    clientId: 'c1',
-    type: 'document',
-    title: 'Payslip outstanding',
-    description: 'Thandi has not submitted her latest payslip.',
-    recipient: 'broker',
-    triggerDate: daysFromNow(-6),
-    recurring: false,
-    status: 'active'
-  },
-  {
-    id: 'r2',
-    clientId: 'c2',
-    type: 'review',
-    title: 'Annual policy review due',
-    description: 'James and Priya\'s annual review is scheduled for next month.',
-    recipient: 'both',
-    triggerDate: daysFromNow(21),
-    recurring: 'yearly',
-    status: 'active'
-  },
-  {
-    id: 'r3',
-    clientId: 'c3',
-    type: 'document',
-    title: 'Proof of address outstanding',
-    description: 'Sipho needs to provide proof of address.',
-    recipient: 'client',
-    triggerDate: daysFromNow(-2),
-    recurring: false,
-    status: 'active'
-  },
-  {
-    id: 'r4',
-    clientId: 'c1',
-    type: 'renewal',
-    title: 'Vehicle insurance renewal',
-    description: 'Thandi\'s vehicle insurance renews on 1 December.',
-    recipient: 'both',
-    triggerDate: daysFromNow(45),
-    recurring: 'yearly',
-    status: 'active'
-  }
-];
+const reminders = [];
 
 /* ── Sample claims ── */
 
-const claims = [
-  {
-    id: 'cl1',
-    clientId: 'c3',
-    insurerId: 'santam',
-    vehicle: 'VW Polo 2022',
-    incidentDate: daysFromNow(-12),
-    description: 'Rear-ended at a traffic light on William Nicol Drive. Rear bumper and boot lid damaged.',
-    currentStep: 4,
-    photos: [],
-    createdAt: daysFromNow(-12) + 'T14:30:00Z'
-  }
-];
+const claims = [];
 
 /* ── Brokers ── */
 
@@ -297,9 +200,51 @@ const brokers = [
     id: 'b1',
     name: 'Lerato Khumalo',
     email: 'lerato@royalsquare.co.za',
+    username: 'lerato',
+    password: 'demo123',
     phone: '011 555 0100'
   }
 ];
+
+/* ── Demo accounts ── */
+
+// Mock credentials only. There is no real authentication here, and these sit
+// in plain text because the demo has no backend and no secrets to protect.
+function findAccount(username, password) {
+  var name = String(username || '').trim().toLowerCase();
+  var pass = String(password || '');
+
+  var match = clients.find(function (c) {
+    return c.username && c.username.toLowerCase() === name && c.password === pass;
+  });
+  if (match) return { role: 'client', id: match.id, name: match.name };
+
+  match = brokers.find(function (b) {
+    return b.username && b.username.toLowerCase() === name && b.password === pass;
+  });
+  if (match) return { role: 'broker', id: match.id, name: match.name };
+
+  match = insurers.find(function (i) {
+    return i.username && i.username.toLowerCase() === name && i.password === pass;
+  });
+  if (match) return { role: 'insurer', id: match.id, name: match.name };
+
+  return null;
+}
+
+// What each role is called in the interface
+const roleLabels = {
+  client: 'Client',
+  broker: 'Adviser',
+  insurer: 'Insurer'
+};
+
+// Where each role lands once signed in
+const dashboardForRole = {
+  client: 'dashboard-client.html',
+  broker: 'dashboard-broker.html',
+  insurer: 'dashboard-broker.html'
+};
 
 /* ── Provider directory ── */
 
@@ -418,6 +363,7 @@ function saveClaim(claim) {
 }
 
 function getSavedRequests() {
+  ensureDataVersion();
   try {
     var raw = localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'requests');
     return raw ? JSON.parse(raw) : [];
@@ -439,6 +385,7 @@ function saveRequest(request) {
 // Seeds the sample claims into localStorage on first run, so the broker can
 // advance a claim and both dashboards read the same record
 function getAllClaims() {
+  ensureDataVersion();
   var raw = localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'claims');
   if (raw) {
     try {
@@ -476,6 +423,16 @@ function advanceClaim(claimId) {
   if (!claim || claim.currentStep >= claimSteps.length) return claim;
   claim.currentStep += 1;
   return updateClaim(claim);
+}
+
+function getClaimsForInsurer(insurerId) {
+  return getAllClaims().filter(function (c) { return c.insurerId === insurerId; });
+}
+
+// An insurer handles whichever clients have a claim registered with it
+function getClientsForInsurer(insurerId) {
+  var ids = getClaimsForInsurer(insurerId).map(function (c) { return c.clientId; });
+  return clients.filter(function (c) { return ids.indexOf(c.id) !== -1; });
 }
 
 function getBrokerById(brokerId) {
