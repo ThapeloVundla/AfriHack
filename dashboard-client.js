@@ -7,7 +7,7 @@
   var session = requireRole('client');
   if (!session) return;
 
-  var clientId = session.clientId || 'c1';
+  var clientId = session.id || 'c1';
   var client = getClientById(clientId);
   if (!client) {
     clearSession();
@@ -166,8 +166,7 @@
   }
 
   function renderClaimsList() {
-    var allClaims = claims.filter(function (c) { return c.clientId === clientId; })
-      .concat(getSavedClaims().filter(function (c) { return c.clientId === clientId; }));
+    var allClaims = getClaimsForClient(clientId);
     var listEl = document.getElementById('claimsList');
 
     if (allClaims.length === 0) {
@@ -315,8 +314,7 @@
 
   // Claim tracker
   function openClaimTracker(claimId) {
-    var allClaims = claims.filter(function (c) { return c.clientId === clientId; })
-      .concat(getSavedClaims().filter(function (c) { return c.clientId === clientId; }));
+    var allClaims = getClaimsForClient(clientId);
     var claim = allClaims.find(function (c) { return c.id === claimId; });
     if (!claim) return;
 
