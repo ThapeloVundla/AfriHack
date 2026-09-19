@@ -13,10 +13,12 @@ function getSession() {
   }
 }
 
-function setSession(role, name) {
+// id is the client or broker record this session belongs to, so a dashboard
+// knows whose data to load
+function setSession(role, name, id) {
   localStorage.setItem(
     FINFLOW_STORAGE_PREFIX + 'session',
-    JSON.stringify({ role, name, loginTime: new Date().toISOString() })
+    JSON.stringify({ role, name, id, loginTime: new Date().toISOString() })
   );
 }
 
