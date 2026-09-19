@@ -221,18 +221,31 @@
   border: 1px solid var(--grey-200);
   border-radius: var(--border-radius);
   padding: var(--space-lg);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(35, 31, 32, 0.1);
+  border-color: var(--grey-400);
 }
 
 .feature-icon {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--border-radius);
   background-color: rgba(192, 45, 46, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: var(--space-md);
-  font-size: 1.25rem;
+  color: var(--crimson);
+  transition: background-color 0.25s ease;
+}
+
+.feature-card:hover .feature-icon {
+  background-color: var(--crimson);
+  color: #fff;
 }
 
 .feature-card h3 {
