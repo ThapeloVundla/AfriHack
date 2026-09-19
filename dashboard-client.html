@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fin Flow - Client dashboard</title>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="dashboard-client.css">
+</head>
+<body>
+  <div class="dashboard">
+
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="header-left">
+        <a href="index.html" class="header-logo" aria-label="Fin Flow home">
+          <img src="assets/logo.jpg" alt="Fin Flow logo">
+        </a>
+        <span class="header-title">Fin Flow</span>
+      </div>
+      <div class="header-right">
+        <button class="header-bell" data-tab="notifications" aria-label="View notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="bell-badge" id="bellBadge" hidden></span>
+        </button>
+        <span class="header-user" id="headerUser"></span>
+      </div>
+    </header>
+
+    <!-- Tab bar -->
+    <nav class="tab-bar" aria-label="Dashboard navigation">
+      <button class="tab-btn" data-tab="home" aria-selected="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </button>
+      <button class="tab-btn" data-tab="goals" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="6"/>
+          <circle cx="12" cy="12" r="2"/>
+        </svg>
+        <span>Goals</span>
+      </button>
+      <button class="tab-btn" data-tab="claims" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span>Claims</span>
+      </button>
+      <button class="tab-btn" data-tab="requests" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        <span>Requests</span>
+      </button>
+      <button class="tab-btn" data-tab="notifications" aria-selected="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span>Alerts</span>
+      </button>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+
+      <!-- HOME SCREEN -->
+      <section class="screen active" id="screen-home">
+        <p class="greeting">Welcome back,</p>
+        <h1 class="greeting-name" id="homeName"></h1>
+
+        <div class="net-worth-display">
+          <p class="net-worth-label">Your net worth</p>
+          <p class="net-worth-amount" id="homeNetWorth"></p>
+        </div>
+
+        <div class="summary-row">
+          <div class="summary-card">
+            <p class="summary-card-label">Total assets</p>
+            <p class="summary-card-value assets" id="homeAssets"></p>
+          </div>
+          <div class="summary-card">
+            <p class="summary-card-label">Total liabilities</p>
+            <p class="summary-card-value liabilities" id="homeLiabilities"></p>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h3 class="chart-title">Assets vs liabilities</h3>
+          <div class="bar-chart" id="homeChart"></div>
+        </div>
+
+        <h3 class="section-heading">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Outstanding documents
+        </h3>
+        <div class="document-list" id="homeDocuments"></div>
+      </section>
+
+      <!-- GOALS SCREEN -->
+      <section class="screen" id="screen-goals">
+        <h1 class="screen-title">Your goals</h1>
+        <p class="screen-subtitle">Track progress towards what matters most.</p>
+        <div class="goals-list" id="goalsList"></div>
+      </section>
+
+      <!-- CLAIMS SCREEN -->
+      <section class="screen" id="screen-claims">
+        <div id="claimsListView">
+          <h1 class="screen-title">Claims</h1>
+          <p class="screen-subtitle">Report an accident, register a claim or track existing claims.</p>
+          <div class="claims-top-bar">
+            <a href="portal.html" class="btn btn-outline" style="display:none"></a>
+            <button class="btn btn-primary" id="btnReportAccident">Report an accident</button>
+            <button class="btn btn-outline" id="btnRegisterClaim">Register a motor claim</button>
+          </div>
+          <div id="claimsList"></div>
+        </div>
+
+        <!-- Report an accident -->
+        <div id="claimsReportView" hidden>
+          <button class="back-link" id="backFromReport">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to claims
+          </button>
+          <h1 class="screen-title">Report an accident</h1>
+          <p class="screen-subtitle">Complete this checklist at the scene. Your answers are saved automatically.</p>
+
+          <div class="police-reminder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <div>
+              <strong>Report to the police within 48 hours.</strong> You need a case number to register your claim with the insurer. Visit your nearest police station or call 10111.
+            </div>
+          </div>
+
+          <ul class="checklist" id="sceneChecklist"></ul>
+          <button class="btn btn-primary" id="btnContinueToClaim" style="width:100%">Continue to register claim</button>
+        </div>
+
+        <!-- Register a motor claim -->
+        <div id="claimsRegisterView" hidden>
+          <button class="back-link" id="backFromRegister">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to claims
+          </button>
+          <h1 class="screen-title">Register a motor claim</h1>
+          <p class="screen-subtitle">Fill in the details below. We will pass them to your insurer.</p>
+
+          <form id="claimForm" novalidate>
+            <!-- Insurer -->
+            <div class="form-section">
+              <h3 class="form-section-title">Insurer</h3>
+              <div class="form-group">
+                <label class="form-label" for="claimInsurer">Select your insurer</label>
+                <select class="form-select" id="claimInsurer" required>
+                  <option value="">Choose an insurer</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Incident details -->
+            <div class="form-section">
+              <h3 class="form-section-title">Incident details</h3>
+              <div class="form-group">
+                <label class="form-label" for="claimDate">Date of incident</label>
+                <input type="date" class="form-input" id="claimDate" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="claimTime">Time of incident</label>
+                <input type="time" class="form-input" id="claimTime" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="claimDescription">Describe what happened</label>
+                <textarea class="form-textarea" id="claimDescription" rows="3" required placeholder="What happened, where and how"></textarea>
+              </div>
+            </div>
+
+            <!-- Police -->
+            <div class="form-section">
+              <h3 class="form-section-title">Police notification</h3>
+              <div class="form-group">
+                <label class="form-label">Were the police notified?</label>
+                <div class="form-radio-group">
+                  <label class="form-radio-label">
+                    <input type="radio" name="policeNotified" value="yes"> Yes
+                  </label>
+                  <label class="form-radio-label">
+                    <input type="radio" name="policeNotified" value="no" checked> No
+                  </label>
+                </div>
+              </div>
+              <div class="form-group" id="caseNumberGroup" hidden>
+                <label class="form-label" for="caseNumber">Police case number</label>
+                <input type="text" class="form-input" id="caseNumber" placeholder="e.g. CAS 123/10/2024">
+              </div>
+            </div>
+
+            <!-- Witnesses -->
+            <div class="form-section">
+              <h3 class="form-section-title">Witnesses</h3>
+              <div class="form-group">
+                <label class="form-label" for="witnessDetails">Witness names and contact details</label>
+                <textarea class="form-textarea" id="witnessDetails" rows="2" placeholder="Name, phone number or email"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Was a witness statement taken?</label>
+                <div class="form-radio-group">
+                  <label class="form-radio-label">
+                    <input type="radio" name="witnessStatement" value="yes"> Yes
+                  </label>
+                  <label class="form-radio-label">
+                    <input type="radio" name="witnessStatement" value="no" checked> No
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Driver -->
+            <div class="form-section">
+              <h3 class="form-section-title">Driver details</h3>
+              <div class="form-group">
+                <label class="form-label" for="driverName">Who was driving?</label>
+                <input type="text" class="form-input" id="driverName" required placeholder="Full name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Vehicle use at time of incident</label>
+                <div class="form-radio-group">
+                  <label class="form-radio-label">
+                    <input type="radio" name="vehicleUse" value="personal" checked> Personal
+                  </label>
+                  <label class="form-radio-label">
+                    <input type="radio" name="vehicleUse" value="business"> Business
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Other vehicles -->
+            <div class="form-section">
+              <h3 class="form-section-title">Other vehicles or property</h3>
+              <div class="form-group">
+                <label class="form-label" for="otherVehicles">Details of other vehicles or property involved</label>
+                <textarea class="form-textarea" id="otherVehicles" rows="2" placeholder="Make, model, colour, registration"></textarea>
+              </div>
+            </div>
+
+            <!-- Third party -->
+            <div class="form-section">
+              <h3 class="form-section-title">Third party details</h3>
+              <div class="form-group">
+                <label class="form-label" for="tpName">Third party name</label>
+                <input type="text" class="form-input" id="tpName" placeholder="Full name or company">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tpLicence">Licence number</label>
+                <input type="text" class="form-input" id="tpLicence" placeholder="Driver's licence number">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tpRegistration">Vehicle registration</label>
+                <input type="text" class="form-input" id="tpRegistration" placeholder="e.g. GP 123-456">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tpInsurer">Third party insurer</label>
+                <input type="text" class="form-input" id="tpInsurer" placeholder="e.g. Outsurance">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tpPolicy">Third party policy number</label>
+                <input type="text" class="form-input" id="tpPolicy" placeholder="If available">
+              </div>
+            </div>
+
+            <!-- Photos -->
+            <div class="form-section">
+              <h3 class="form-section-title">Photos and documents</h3>
+              <div class="form-group">
+                <label class="form-label">Upload photos of vehicles, damage, road surface, registration discs and licences</label>
+                <div class="photo-upload-area" id="photoUploadArea">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <p>Tap to upload photos</p>
+                  <input type="file" id="photoInput" accept="image/*" multiple>
+                </div>
+                <div class="photo-previews" id="photoPreviews"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Driver's licence photo</label>
+                <div class="photo-upload-area" id="licenceUploadArea">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <p>Tap to upload driver's licence</p>
+                  <input type="file" id="licenceInput" accept="image/*">
+                </div>
+                <div class="photo-previews" id="licencePreviews"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Sketch of the accident scene</label>
+                <div class="photo-upload-area" id="sketchUploadArea">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <p>Tap to upload a sketch</p>
+                  <input type="file" id="sketchInput" accept="image/*">
+                </div>
+                <div class="photo-previews" id="sketchPreviews"></div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width:100%">Submit claim</button>
+          </form>
+        </div>
+
+        <!-- Claim tracker -->
+        <div id="claimsTrackerView" hidden>
+          <button class="back-link" id="backFromTracker">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to claims
+          </button>
+          <h1 class="screen-title" id="trackerTitle">Claim tracker</h1>
+          <p class="screen-subtitle" id="trackerSubtitle"></p>
+          <div class="tracker" id="claimTracker"></div>
+        </div>
+
+        <!-- Claim submitted success -->
+        <div id="claimsSuccessView" hidden>
+          <div class="success-message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h3>Claim submitted</h3>
+            <p>Your claim has been registered. Your broker will review it and submit it to the insurer.</p>
+            <button class="btn btn-primary" id="btnBackToClaims">Back to claims</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- REQUESTS SCREEN -->
+      <section class="screen" id="screen-requests">
+        <div id="requestsListView">
+          <h1 class="screen-title">Requests</h1>
+          <p class="screen-subtitle">Send a request to your adviser. We will handle the rest.</p>
+          <div class="requests-grid" id="requestsGrid"></div>
+        </div>
+
+        <!-- Individual request form -->
+        <div id="requestFormView" hidden>
+          <button class="back-link" id="backFromRequest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to requests
+          </button>
+          <h1 class="screen-title" id="requestFormTitle"></h1>
+          <p class="screen-subtitle" id="requestFormDesc"></p>
+          <form id="requestForm" novalidate></form>
+        </div>
+
+        <!-- Request submitted success -->
+        <div id="requestsSuccessView" hidden>
+          <div class="success-message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <h3>Request submitted</h3>
+            <p id="requestSuccessMsg">Your adviser will process this and get back to you.</p>
+            <button class="btn btn-primary" id="btnBackToRequests">Back to requests</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- NOTIFICATIONS SCREEN -->
+      <section class="screen" id="screen-notifications">
+        <h1 class="screen-title">Notifications</h1>
+        <p class="screen-subtitle">Reminders and updates from your adviser.</p>
+        <div class="notification-list" id="notificationsList"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="dashboard-client.js"></script>
+</body>
+</html>

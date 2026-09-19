@@ -269,3 +269,134 @@ const providers = [
   { id: 'allan-gray', name: 'Allan Gray', category: 'Investments', phone: '0860 000 654', website: 'allangray.co.za' },
   { id: 'santam', name: 'Santam', category: 'Short-term insurance', phone: '0860 444 444', website: 'santam.co.za' }
 ];
+
+/* ── Request types ── */
+
+const requestTypes = [
+  {
+    id: 'change-address',
+    name: 'Change of address',
+    description: 'Update your residential address across all policies.',
+    fields: [
+      { name: 'newAddress', label: 'New address', type: 'textarea', required: true },
+      { name: 'effectiveDate', label: 'Effective date', type: 'date', required: true },
+      { name: 'proofDoc', label: 'Proof of new address', type: 'file', required: true }
+    ]
+  },
+  {
+    id: 'change-bank',
+    name: 'Change of bank details',
+    description: 'Update the bank account for premium debit orders or claim payouts.',
+    fields: [
+      { name: 'bankName', label: 'Bank name', type: 'text', required: true },
+      { name: 'accountNumber', label: 'Account number', type: 'text', required: true },
+      { name: 'branchCode', label: 'Branch code', type: 'text', required: true },
+      { name: 'accountType', label: 'Account type', type: 'select', options: ['Savings', 'Cheque', 'Current'], required: true },
+      { name: 'proofDoc', label: 'Bank statement or confirmation letter', type: 'file', required: true }
+    ]
+  },
+  {
+    id: 'policy-document',
+    name: 'Request a policy document',
+    description: 'Request a copy of your policy schedule, contract or certificate.',
+    fields: [
+      { name: 'policyNumber', label: 'Policy number (if known)', type: 'text', required: false },
+      { name: 'documentType', label: 'Document type', type: 'select', options: ['Policy schedule', 'Contract', 'Certificate of insurance', 'Other'], required: true },
+      { name: 'notes', label: 'Additional details', type: 'textarea', required: false }
+    ]
+  },
+  {
+    id: 'border-letter',
+    name: 'Request a border letter',
+    description: 'Get a letter confirming your vehicle is insured for cross-border travel.',
+    fields: [
+      { name: 'vehicleReg', label: 'Vehicle registration number', type: 'text', required: true },
+      { name: 'countries', label: 'Countries you will visit', type: 'textarea', required: true },
+      { name: 'travelDates', label: 'Travel dates', type: 'text', required: true, placeholder: 'e.g. 15 Dec 2024 to 5 Jan 2025' }
+    ]
+  },
+  {
+    id: 'irp5-request',
+    name: 'Request an IRP5',
+    description: 'Request an IRP5 tax certificate from your investment provider.',
+    fields: [
+      { name: 'providerName', label: 'Investment provider', type: 'select', options: ['Sanlam', 'Old Mutual', 'Liberty', 'Momentum', 'Discovery', 'Allan Gray'], required: true },
+      { name: 'taxYear', label: 'Tax year', type: 'text', required: true, placeholder: 'e.g. 2024' },
+      { name: 'accountNumber', label: 'Account or policy number', type: 'text', required: false }
+    ]
+  },
+  {
+    id: 'consultation',
+    name: 'Request a consultation',
+    description: 'Book a meeting with your adviser to review your portfolio or discuss changes.',
+    fields: [
+      { name: 'topic', label: 'What would you like to discuss?', type: 'textarea', required: true },
+      { name: 'preferredDate', label: 'Preferred date', type: 'date', required: true },
+      { name: 'preferredTime', label: 'Preferred time', type: 'select', options: ['Morning (08:00-12:00)', 'Afternoon (12:00-17:00)', 'Either'], required: true },
+      { name: 'contactMethod', label: 'How should we contact you?', type: 'select', options: ['Phone call', 'Video call', 'In person'], required: true }
+    ]
+  }
+];
+
+/* ── Claim scene checklist items ── */
+
+const sceneChecklist = [
+  'Take photos of all vehicles involved',
+  'Photograph the damage to each vehicle',
+  'Photograph the road surface and surroundings',
+  'Photograph registration discs and licence plates',
+  'Note the exact location (street name, intersection or landmark)',
+  'Record the date and time of the incident',
+  'Get contact details of any witnesses',
+  'Ask witnesses if they are willing to provide a statement',
+  'Note the weather and road conditions',
+  'Do not admit fault or sign any documents at the scene'
+];
+
+/* ── localStorage helpers for claims and requests ── */
+
+function getSavedClaims() {
+  try {
+    var raw = localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'claims');
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveClaim(claim) {
+  var saved = getSavedClaims();
+  claim.id = 'cl' + Date.now();
+  claim.createdAt = new Date().toISOString();
+  claim.currentStep = 1;
+  saved.push(claim);
+  localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'claims', JSON.stringify(saved));
+  return claim;
+}
+
+function getSavedRequests() {
+  try {
+    var raw = localStorage.getItem(FINFLOW_STORAGE_PREFIX + 'requests');
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRequest(request) {
+  var saved = getSavedRequests();
+  request.id = 'req' + Date.now();
+  request.createdAt = new Date().toISOString();
+  request.status = 'submitted';
+  saved.push(request);
+  localStorage.setItem(FINFLOW_STORAGE_PREFIX + 'requests', JSON.stringify(saved));
+  return request;
+}
+
+function getClientById(clientId) {
+  return clients.find(function (c) { return c.id === clientId; }) || null;
+}
+
+function getInsurerById(insurerId) {
+  return insurers.find(function (i) { return i.id === insurerId; }) || null;
+}
