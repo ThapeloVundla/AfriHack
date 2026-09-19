@@ -7,7 +7,7 @@
   var session = requireRole('client');
   if (!session) return;
 
-  var clientId = session.id || 'c1';
+  var clientId = session.id;
   var client = getClientById(clientId);
   if (!client) {
     clearSession();
@@ -60,7 +60,13 @@
   }
 
   /* ── Header ── */
-  document.getElementById('headerUser').textContent = client.name.split(' ')[0];
+  document.getElementById('headerUser').textContent = client.name;
+  document.getElementById('headerRole').textContent = roleLabels[session.role];
+
+  document.getElementById('btnSignOut').addEventListener('click', function () {
+    clearSession();
+    window.location.href = 'portal.html';
+  });
 
   /* ── Home screen ── */
   function renderHome() {
@@ -80,7 +86,12 @@
     // Bar chart
     var maxVal = Math.max(assets, liabilities);
     var chartEl = document.getElementById('homeChart');
-    chartEl.innerHTML =
+
+    // Nothing to scale against until the balance sheet has a figure in it
+    if (maxVal === 0) {
+      chartEl.innerHTML = '<div class="empty-state"><p>Add your assets and liabilities to see your net worth.</p></div>';
+    } else {
+      chartEl.innerHTML =
       '<div class="bar-row">' +
         '<span class="bar-label">Assets</span>' +
         '<div class="bar-track"><div class="bar-fill assets" style="width:' + (assets / maxVal * 100) + '%"></div></div>' +
@@ -91,6 +102,7 @@
         '<div class="bar-track"><div class="bar-fill liabilities" style="width:' + (liabilities / maxVal * 100) + '%"></div></div>' +
         '<span class="bar-value">' + formatCurrency(liabilities) + '</span>' +
       '</div>';
+    }
 
     // Outstanding documents
     var docsEl = document.getElementById('homeDocuments');
@@ -111,8 +123,8 @@
       return r.clientId === clientId && (r.recipient === 'client' || r.recipient === 'both');
     });
     var badge = document.getElementById('bellBadge');
-    if (clientReminders.length > 0 && badge) {
-      badge.hidden = false;
+    if (badge) {
+      badge.hidden = clientReminders.length === 0;
     }
   }
 

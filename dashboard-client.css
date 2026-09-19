@@ -1,53 +1,74 @@
 /* ── Client dashboard ── */
 
 /* ── Layout ── */
+/*
+  Mobile first. A fixed top bar with a tab bar along the bottom of a phone,
+  becoming the same top bar and sidebar the broker dashboard uses from 768px.
+*/
 .dashboard {
   min-height: 100vh;
+  /* Room for the tab bar fixed to the bottom */
   padding-bottom: 4rem;
 }
 
+/* ── Top bar ── */
 .dashboard-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: #fff;
-  border-bottom: 1px solid var(--grey-200);
-  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-sm);
+  height: 3.5rem;
   padding-inline: var(--space-md);
+  background: #fff;
+  border-bottom: 1px solid var(--grey-200);
 }
 
-.header-top {
+.header-logo {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  min-width: 0;
 }
 
 .header-logo img {
   width: 28px;
   height: 28px;
   border-radius: 4px;
+  flex-shrink: 0;
 }
 
 .header-title {
   font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--black);
+  white-space: nowrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .header-bell {
   position: relative;
-  width: 44px;
-  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius);
   color: var(--charcoal);
   flex-shrink: 0;
+}
+
+.header-bell:hover {
+  color: var(--crimson);
 }
 
 .header-bell svg {
@@ -66,27 +87,70 @@
   border: 2px solid #fff;
 }
 
-.header-user-bar {
-  display: none;
+.header-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
+/* The name needs room a 360px phone does not have, so it starts hidden */
 .header-user {
+  display: none;
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--charcoal);
+  color: var(--black);
+  white-space: nowrap;
 }
 
-/* Tab bar -- fixed at bottom on mobile */
+.header-role {
+  padding: 2px var(--space-sm);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--crimson);
+  background-color: rgba(192, 45, 46, 0.08);
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.btn-text {
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--grey-600);
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+}
+
+.btn-text:hover {
+  color: var(--crimson);
+}
+
+@media (min-width: 480px) {
+  .header-user {
+    display: inline;
+  }
+
+  .header-identity {
+    gap: var(--space-sm);
+    padding-left: var(--space-sm);
+    border-left: 1px solid var(--grey-200);
+  }
+}
+
+/* ── Navigation ── */
 .tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  background: #fff;
-  border-top: 1px solid var(--grey-200);
   display: flex;
   height: 4rem;
+  background: #fff;
+  border-top: 1px solid var(--grey-200);
 }
 
 .tab-btn {
@@ -96,30 +160,29 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  color: var(--grey-400);
+  padding: var(--space-xs);
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  padding: var(--space-xs);
-  transition: color 0.2s;
+  color: var(--grey-400);
+  transition: color 0.2s, background-color 0.2s;
 }
 
 .tab-btn svg {
   width: 22px;
   height: 22px;
+  flex-shrink: 0;
 }
 
+.tab-btn:hover,
 .tab-btn[aria-selected="true"] {
   color: var(--crimson);
 }
 
-.tab-btn:hover {
-  color: var(--crimson);
-}
-
-/* Main content area */
+/* ── Screens ── */
 .main-content {
-  margin-top: 3rem;
+  margin-top: 3.5rem;
+  min-width: 0;
 }
 
 .screen {
@@ -1005,73 +1068,54 @@
 }
 
 /* ── Tablet: 768px+ ── */
+/* ── Tablet and up: the broker shell, sidebar beside the content ── */
 @media (min-width: 768px) {
   .dashboard {
     padding-bottom: 0;
   }
 
-  /* Header becomes a fixed sidebar */
   .dashboard-header {
-    top: 0;
-    left: 0;
+    position: sticky;
+    left: auto;
     right: auto;
-    bottom: 0;
-    width: 220px;
-    height: auto;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    padding: 0;
-    border-bottom: none;
-    border-right: 1px solid var(--grey-200);
-    overflow-y: auto;
+    height: 4rem;
+    padding-inline: var(--space-lg);
   }
 
-  .header-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-xs);
-    padding: var(--space-lg) var(--space-md);
-    border-bottom: 1px solid var(--grey-200);
+  .dashboard-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: start;
   }
 
-  .header-bell {
-    position: absolute;
-    top: var(--space-lg);
-    right: var(--space-md);
-  }
-
-  .header-user-bar {
-    display: block;
-    margin-top: auto;
-    padding: var(--space-md);
-    border-top: 1px solid var(--grey-200);
-  }
-
-  /* Tab bar -- static, vertical inside the sidebar */
+  /* The tab bar becomes the sidebar */
   .tab-bar {
-    position: static;
+    position: sticky;
+    top: 4rem;
+    bottom: auto;
+    left: auto;
+    right: auto;
     flex-direction: column;
-    height: auto;
+    gap: var(--space-xs);
+    height: calc(100vh - 4rem);
+    padding: var(--space-lg) var(--space-md);
     border-top: none;
-    background: transparent;
-    padding: var(--space-sm) 0;
-    flex: 1;
+    border-right: 1px solid var(--grey-200);
   }
 
   .tab-btn {
+    flex: 0 0 auto;
     flex-direction: row;
     justify-content: flex-start;
-    gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
-    font-size: var(--font-size-sm);
-    border-radius: 0;
+    gap: var(--space-md);
+    width: 100%;
     min-height: 44px;
-  }
-
-  .tab-btn[aria-selected="true"] {
-    background: rgba(192, 45, 46, 0.06);
-    color: var(--crimson);
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-base);
+    letter-spacing: normal;
+    color: var(--charcoal);
+    text-align: left;
+    border-radius: var(--border-radius);
   }
 
   .tab-btn svg {
@@ -1079,15 +1123,24 @@
     height: 20px;
   }
 
-  /* Main content shifts right */
+  .tab-btn:hover {
+    background-color: var(--grey-100);
+    color: var(--charcoal);
+  }
+
+  .tab-btn[aria-selected="true"] {
+    background-color: rgba(192, 45, 46, 0.08);
+    color: var(--crimson);
+  }
+
   .main-content {
     margin-top: 0;
-    margin-left: 220px;
+    padding: var(--space-xl);
   }
 
   .screen {
-    padding: var(--space-xl) var(--space-2xl);
-    max-width: 900px;
+    padding: 0;
+    max-width: 1000px;
   }
 
   .requests-grid {
@@ -1100,21 +1153,19 @@
   }
 }
 
-/* ── Desktop: 1280px+ ── */
-@media (min-width: 1280px) {
-  .dashboard-header {
-    width: 260px;
+/* ── Laptop: 1024px+ ── */
+@media (min-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 240px 1fr;
   }
 
   .main-content {
-    margin-left: 260px;
+    padding: var(--space-2xl);
   }
+}
 
-  .screen {
-    padding: var(--space-2xl) var(--space-3xl);
-    max-width: 1000px;
-  }
-
+/* ── Desktop: 1280px+ ── */
+@media (min-width: 1280px) {
   .summary-row {
     gap: var(--space-lg);
   }

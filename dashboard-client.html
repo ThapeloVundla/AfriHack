@@ -10,13 +10,14 @@
 <body>
   <div class="dashboard">
 
-    <!-- Sidebar / top bar -->
+    <!-- Top bar -->
     <header class="dashboard-header">
-      <div class="header-top">
-        <a href="index.html" class="header-logo" aria-label="Fin Flow home">
-          <img src="assets/logo.jpg" alt="Fin Flow logo">
-        </a>
+      <a href="index.html" class="header-logo" aria-label="Fin Flow home">
+        <img src="assets/logo.jpg" alt="Fin Flow logo">
         <span class="header-title">Fin Flow</span>
+      </a>
+
+      <div class="header-actions">
         <button class="header-bell" data-tab="notifications" aria-label="View notifications">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -24,7 +25,16 @@
           </svg>
           <span class="bell-badge" id="bellBadge" hidden></span>
         </button>
+
+        <div class="header-identity">
+          <span class="header-user" id="headerUser"></span>
+          <span class="header-role" id="headerRole"></span>
+          <button type="button" class="btn-text" id="btnSignOut">Sign out</button>
+        </div>
       </div>
+    </header>
+
+    <div class="dashboard-layout">
 
       <nav class="tab-bar" aria-label="Dashboard navigation">
         <button class="tab-btn" data-tab="home" aria-selected="true">
@@ -69,12 +79,7 @@
         </button>
       </nav>
 
-      <div class="header-user-bar">
-        <span class="header-user" id="headerUser"></span>
-      </div>
-    </header>
-
-    <!-- Main content -->
+      <!-- Main content -->
     <main class="main-content">
 
       <!-- HOME SCREEN -->
@@ -403,6 +408,8 @@
       </section>
 
     </main>
+
+    </div>
   </div>
 
   <script src="data.js"></script>
